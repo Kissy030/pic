@@ -5,7 +5,7 @@ services:
     networks:
       - pic-net
     ports:
-      - 6380:6380
+      - 6380:6379
 
   mysql-pic-container:
     image: mysql:latest
@@ -15,7 +15,7 @@ services:
     networks:
       - pic-net
     ports:
-      - 3307:3307
+      - 3307:3306
 
   pic-backend:
     build:

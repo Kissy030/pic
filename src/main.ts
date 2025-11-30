@@ -6,11 +6,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
-    origin: 'http://localhost:5173', // 或设置为 true 允许所有域名（开发环境）
+    origin: true, // 或设置为 true 允许所有域名（开发环境）
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type,Authorization',
-    credentials: true, // 如果需要传递 cookies
+    credentials: true,
   });
-  await app.listen(4000);
+  await app.listen(3001);
 }
 bootstrap();
