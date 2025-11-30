@@ -11,6 +11,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './auth.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RedisModule } from './redis/redis.module';
+import { OssModule } from './oss/oss.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -30,6 +31,7 @@ import { RedisModule } from './redis/redis.module';
     }),
     MailModule,
     UserModule,
+    OssModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'mysql-pic-container',
