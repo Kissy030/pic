@@ -8,7 +8,7 @@ export class OssService {
   constructor() {
     this.client = new OSS({
       region: 'oss-cn-hangzhou',
-      accessKeyId: process.env.OSS_ACCESS_KEY_SECRET,
+      accessKeyId: process.env.OSS_ACCESS_KEY_ID,
       accessKeySecret: process.env.OSS_ACCESS_KEY_SECRET,
       bucket: 'mapbed-wyz',
     });

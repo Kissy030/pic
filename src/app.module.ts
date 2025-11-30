@@ -16,7 +16,6 @@ import { OssModule } from './oss/oss.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
     }),
 
     JwtModule.registerAsync({

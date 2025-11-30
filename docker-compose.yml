@@ -28,6 +28,8 @@ services:
       - mysql-pic-container
     networks:
       - pic-net
+    env_file:
+      - .env
 
 networks:
   pic-net:
