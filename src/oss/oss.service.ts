@@ -22,7 +22,9 @@ export class OssService {
     const url = this.client.signatureUrl(objectName, {
       method: 'PUT',
       expires,
-      mime: contentType.trim(),
+      headers: {
+        'Content-Type': contentType,
+      },
     });
     const accessUrl = `https://mapbed-wyz.oss-cn-hangzhou.aliyuncs.com/${objectName}`;
     return {
