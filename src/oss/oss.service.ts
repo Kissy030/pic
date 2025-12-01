@@ -19,13 +19,10 @@ export class OssService {
    * @param expires 
    */
 
-  async getUploadUrl(objectName: string, contentType: string) {
+  async getUploadUrl(objectName: string) {
     const uploadUrl = this.client.signatureUrl(objectName, {
       method: 'PUT',
       expires: 3600,
-      headers: {
-        'Content-Type': contentType,
-      },
     });
 
     return {
