@@ -11,8 +11,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './auth.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RedisModule } from './redis/redis.module';
-import { OssModule } from './oss/oss.module';
 import { StsModule } from './sts/sts.module';
+import { StsService } from './sts/sts.service';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -48,6 +48,6 @@ import { StsModule } from './sts/sts.module';
     RedisModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AuthGuard],
+  providers: [AppService, AuthGuard, StsService],
 })
 export class AppModule {}
