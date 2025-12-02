@@ -10,6 +10,9 @@ export class OssController {
     @Query('fileName') fileName: string,
     @Query('contentType') contentType: string,
   ) {
+    console.log('接收到上传请求:');
+    console.log('   fileName:', fileName);
+    console.log('   contentType:', contentType);
     if (!fileName || !contentType) {
       throw new BadRequestException('fileName and contentType are required');
     }
