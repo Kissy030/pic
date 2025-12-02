@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import Core from '@alicloud/pop-core';
 import * as OSS from 'ali-oss';
 
 // 定义返回的临时凭证类型
@@ -15,16 +14,30 @@ export class StsService {
   private readonly logger = new Logger(StsService.name);
 
   // STS 客户端配置
-  private readonly stsClient: Core;
+  private stsClient: any | null = null;
 
-  constructor() {
-    // TODO: 建议将这些敏感信息移到环境变量中
-    this.stsClient = new Core({
-      accessKeyId: process.env.RAM_USER_ACCESS_KEY_ID || '',
-      accessKeySecret: process.env.RAM_USER_ACCESS_KEY_SECRET || '',
-      endpoint: 'https://sts.aliyuncs.com',
-      apiVersion: '2015-04-01',
-    });
+  private async initializeStsClient() {
+    // 3. 检查是否已经初始化过
+    if (!this.stsClient) {
+      try {
+        // 动态导入 @alicloud/pop-core
+        const CoreModule = await import('@alicloud/pop-core');
+        const Core = CoreModule.default; // 获取默认导出
+
+        // 4. 在这里赋值
+        this.stsClient = new Core({
+          accessKeyId: process.env.RAM_USER_ACCESS_KEY_ID || '',
+          accessKeySecret: process.env.RAM_USER_ACCESS_KEY_SECRET || '',
+          endpoint: 'https://sts.aliyuncs.com',
+          apiVersion: '2015-04-01',
+        });
+        this.logger.log('STS Client initialized successfully.');
+      } catch (error) {
+        this.logger.error('Failed to initialize STS Client:', error.stack);
+        // 可以考虑缓存错误状态或抛出异常
+        throw new Error(`Failed to initialize STS client: ${error.message}`);
+      }
+    }
   }
 
   /**
@@ -39,6 +52,10 @@ export class StsService {
     roleSessionName: string,
     durationSeconds: number = 3600,
   ): Promise<StsCredentials> {
+    await this.initializeStsClient();
+    if (!this.stsClient) {
+      throw new Error('STS Client failed to initialize.');
+    }
     try {
       const params = {
         RoleArn: roleArn,
@@ -54,7 +71,7 @@ export class StsService {
         `Calling AssumeRole for RoleArn: ${roleArn}, SessionName: ${roleSessionName}`,
       );
 
-      const result: any = await this.stsClient.request(
+      const result: any = await this.stsClient!.request(
         'AssumeRole',
         params,
         requestOption,
